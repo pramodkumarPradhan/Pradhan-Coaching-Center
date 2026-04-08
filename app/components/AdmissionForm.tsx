@@ -14,7 +14,32 @@ export default function AdmissionForm() {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+
+    const phoneNumber = "919999902095"; //0 👈 your WhatsApp number (without +)
+
+    const message = `━━━━━━━━━━━━━━
+📢 *New Admission Enquiry*
+━━━━━━━━━━━━━━
+
+👤 Name: ${form.name}
+📞 Phone: ${form.phone}
+🎓 Class: ${form.cls}
+📘 Subject: ${form.subject}
+
+💬 Message: ${form.message || "N/A"}
+
+🕒 Time: ${new Date().toLocaleString()}
+`;
+
+    const encodedMessage = encodeURIComponent(message);
+
+    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+    window.open(whatsappURL, "_blank");
+
+    setTimeout(() => {
+      setSubmitted(true);
+    }, 500);
   };
 
   return (
@@ -48,7 +73,7 @@ export default function AdmissionForm() {
             <div className="mt-8 p-5 bg-blue-50 rounded-2xl border border-blue-100">
               <p className="text-slate-700 text-sm font-semibold mb-1">📞 Call us directly</p>
               <a href="tel:+919999902095" className="text-blue-600 font-extrabold text-xl hover:text-blue-700">
-                +91 63706 27752
+                +91 99999 02095
               </a>
             </div>
           </motion.div>
