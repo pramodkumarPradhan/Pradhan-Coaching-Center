@@ -39,7 +39,7 @@ export default function Home() {
       <main>
         <section id="home"><HeroSection /></section>
         <section id="stats"><StatsSection /></section>
-        {/* <section id="notices"><NoticeBoard /></section> */}
+        <section id="notices"><NoticeBoard /></section>
         <section id="courses"><CoursesSection /></section>
         <section id="fees"><FeeStructure /></section>
         <section id="features"><FeaturesSection /></section>
