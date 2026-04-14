@@ -3,6 +3,7 @@ import { useState } from "react";
 
 export default function DownloadsPage() {
   const [openClass, setOpenClass] = useState<number | null>(1);
+  const [openBook, setOpenBook] = useState<number | null>(0);
 
   const data = [
     {
@@ -14,7 +15,6 @@ export default function DownloadsPage() {
         { name: "Social Science", icon: "🌍", size: "-", url: "#" },
       ],
     },
-
     {
       class: "Class 10",
       subjects: [
@@ -62,7 +62,6 @@ export default function DownloadsPage() {
         },
       ],
     },
-
     {
       class: "Class 11",
       subjects: [
@@ -77,78 +76,128 @@ export default function DownloadsPage() {
         { name: "Physics", icon: "⚛️", size: "-", url: "#" },
         { name: "Biology", icon: "🧬", size: "-", url: "#" },
       ],
+    }
+  ];
+
+  // ✅ Books Section
+  const booksData = [
+    {
+      title: "Class 9 English Book",
+      chapters: [
+        {
+          name: "Chapter 1 (Part I)",
+          url: "https://pub-478bcf1c8ef5411fbc3b76fb27883c64.r2.dev/CLASS%209%20ENGLISH%20(KAVERI)/Class%209th%20English%20Chapter%201%20(I).pdf",
+        },
+        {
+          name: "Chapter 1 (Part II)",
+          url: "https://pub-478bcf1c8ef5411fbc3b76fb27883c64.r2.dev/CLASS%209%20ENGLISH%20(KAVERI)/class%209%20chap%201(II).pdf",
+        },
+        {
+          name: "Chapter 2 (Part I)",
+          url: "https://pub-478bcf1c8ef5411fbc3b76fb27883c64.r2.dev/CLASS%209%20ENGLISH%20(KAVERI)/class%209%20chap%202(I).pdf",
+        },
+        {
+          name: "Chapter 2 (Part II)",
+          url: "https://pub-478bcf1c8ef5411fbc3b76fb27883c64.r2.dev/CLASS%209%20ENGLISH%20(KAVERI)/class%209%20chap%202(II).pdf",
+        },
+      ],
     },
   ];
 
-  const toggleClass = (index: number) => {
-    setOpenClass(openClass === index ? null : index);
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-blue-100 p-4 md:p-10">
-      <div className="max-w-5xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 p-4 md:p-10">
+      <div className="max-w-6xl mx-auto">
 
-        {/* Header */}
-        <div className="mb-10 text-center">
-          <h1 className="text-3xl md:text-5xl font-bold text-gray-800">
-            📚 Supporting Materials
-          </h1>
-          <p className="text-gray-500 mt-3">
-            View or download class-wise study materials
-          </p>
-        </div>
+        {/* ================= BOOKS ================= */}
+        <h2 className="text-4xl font-extrabold text-center mb-8 text-purple-600">
+          📖 Books
+        </h2>
 
-        {/* Classes */}
-        <div className="space-y-5">
+        {booksData.map((book, i) => (
+          <div key={i} className="bg-white shadow-2xl rounded-3xl mb-10 border">
+
+            <button
+              onClick={() => setOpenBook(openBook === i ? null : i)}
+              className="w-full flex justify-between items-center px-8 py-5 text-xl font-semibold bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-t-3xl"
+            >
+              {book.title}
+              <span className="text-2xl">{openBook === i ? "−" : "+"}</span>
+            </button>
+
+            {openBook === i && (
+              <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {book.chapters.map((chap, index) => (
+                  <div
+                    key={index}
+                    className="bg-white border rounded-2xl p-5 shadow hover:shadow-xl transition hover:-translate-y-1"
+                  >
+                    <h3 className="font-semibold text-gray-900 mb-3">
+                      {chap.name}
+                    </h3>
+
+                    <a
+                      href={chap.url}
+                      target="_blank"
+                      className="block text-center bg-purple-500 hover:bg-purple-600 text-white py-2 rounded-xl"
+                    >
+                      View Chapter
+                    </a>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+
+        {/* ================= SUPPORTING MATERIAL ================= */}
+        <h2 className="text-4xl font-extrabold text-center mb-8 text-blue-600">
+          📚 Supporting Materials
+        </h2>
+
+        <div className="space-y-6">
           {data.map((cls, i) => (
-            <div key={i} className="bg-white rounded-2xl shadow-lg border">
+            <div key={i} className="bg-white shadow-2xl rounded-3xl border">
 
-              {/* Class Header */}
               <button
-                onClick={() => toggleClass(i)}
-                className="w-full flex justify-between items-center px-6 py-4 text-lg font-semibold text-gray-800 bg-gradient-to-r from-blue-50 to-indigo-50"
+                onClick={() =>
+                  setOpenClass(openClass === i ? null : i)
+                }
+                className="w-full flex justify-between items-center px-8 py-5 text-xl font-semibold bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-t-3xl"
               >
-                {cls.class} Materials
-                <span>{openClass === i ? "−" : "+"}</span>
+                🎓 {cls.class}
+                <span className="text-2xl">{openClass === i ? "−" : "+"}</span>
               </button>
 
-              {/* Subjects */}
               {openClass === i && (
-                <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                   {cls.subjects.map((sub, index) => (
                     <div
                       key={index}
-                      className="border rounded-xl p-4 bg-white hover:shadow-md transition"
+                      className="bg-white border rounded-2xl p-5 shadow hover:shadow-xl transition hover:-translate-y-1"
                     >
                       <div className="flex items-center gap-3 mb-3">
                         <div className="text-2xl">{sub.icon}</div>
                         <div>
-                          <h3 className="font-semibold text-gray-800">
+                          <h3 className="font-semibold text-gray-900">
                             {sub.name}
                           </h3>
-                          <p className="text-xs text-gray-600">
+                          <p className="text-xs text-gray-500">
                             {sub.size}
                           </p>
                         </div>
                       </div>
 
-                      <div className="flex gap-2">
-                        <a
-                          href={sub.url}
-                          target="_blank"
-                          className="flex-1 text-center bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg text-sm"
-                        >
-                          View
-                        </a>
-
-                        {/* <a
-                          href={sub.url}
-                          download
-                          className="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-sm"
-                        >
-                          Download
-                        </a> */}
-                      </div>
+                      <a
+                        href={sub.url}
+                        target="_blank"
+                        className={`block text-center py-2 rounded-xl ${
+                          sub.url === "#"
+                            ? "bg-gray-300 text-gray-600"
+                            : "bg-green-500 text-white hover:bg-green-600"
+                        }`}
+                      >
+                        {sub.url === "#" ? "Coming Soon" : "View"}
+                      </a>
                     </div>
                   ))}
                 </div>
@@ -157,8 +206,8 @@ export default function DownloadsPage() {
           ))}
         </div>
 
-        {/* Footer */}
-        <div className="text-center mt-10 text-gray-400 text-sm">
+        {/* FOOTER */}
+        <div className="text-center mt-14 text-gray-500 text-sm">
           © {new Date().getFullYear()} Pradhan Coaching Center
         </div>
       </div>
