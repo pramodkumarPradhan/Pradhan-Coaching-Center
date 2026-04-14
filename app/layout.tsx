@@ -2,23 +2,23 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Pradhan Coaching Center | Best Coaching in Shiamgir",
+  metadataBase: new URL("https://pradhancoaching.com"),
+  title: "Pradhan Coaching Center - Best Coaching in Tekhand, Okhla Phase 1, New Delhi",
   description:
-    "Pradhan Coaching Center offers quality education for classes 8th to 12th. Experienced faculty, regular tests, and study materials available.",
+    "Pradhan Coaching Center in Tekhand, Okhla Phase 1, New Delhi provides quality education for classes 8th to 12th with experienced teachers, regular tests, and study materials.",
   keywords: [
-    "Pradhan Coaching Center",
-    "Coaching in Shiamgir",
-    "Best coaching center",
-    "Class 8 9 10 11 12 coaching",
-    "Study materials Shiamgir",
+    "Pradhan Coaching Center Tekhand",
+    "Coaching in Okhla Phase 1",
+    "Best coaching in New Delhi",
+    "Class 8 9 10 11 12 coaching Delhi",
+    "Tuition center Tekhand Delhi",
   ],
   authors: [{ name: "Pradhan Coaching Center" }],
   openGraph: {
     title: "Pradhan Coaching Center",
-    description:
-      "Quality education for academic excellence.",
-    url: "https://radharanicoaching.in",
-    siteName: "Radharani Coaching",
+    description: "Best coaching center in Tekhand, Okhla Phase 1, New Delhi.",
+    url: "https://pradhancoaching.com",
+    siteName: "Pradhan Coaching Center",
     type: "website",
   },
 };

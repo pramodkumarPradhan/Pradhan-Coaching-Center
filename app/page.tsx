@@ -1,3 +1,5 @@
+import { Nunito } from "next/font/google";
+
 import Navbar from "./components/Navbar";
 import ExamCountdown from "./components/ExamCountdown";
 import HeroSection from "./components/HeroSection";
@@ -17,42 +19,94 @@ import ContactSection from "./components/ContactSection";
 import Footer from "./components/Footer";
 import FloatingButtons from "./components/FloatingButtons";
 
+// ✅ Google Font (Proper Way)
+const nunito = Nunito({
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800", "900"],
+});
+
+// ✅ Page-level SEO (IMPORTANT)
+export const metadata = {
+  title:
+    "Pradhan Coaching Center - Best Coaching in Tekhand, Okhla Phase 1, New Delhi",
+  description:
+    "Pradhan Coaching Center in Tekhand, Okhla Phase 1, New Delhi provides quality education for classes 8th to 12th with experienced teachers, regular tests, and study materials.",
+};
+
 export default function Home() {
   return (
     <div
-      className="bg-slate-50 text-slate-800 scroll-smooth"
-      style={{ fontFamily: "'Nunito', 'Segoe UI', sans-serif" }}
+      className={`${nunito.className} bg-slate-50 text-slate-800 scroll-smooth`}
     >
-      <style>{`.import url('https://fonts.googleapis.com/css2?family=Nunito:wght.400;600;700;800;900&display=swap');`}</style>
-
-      {/* Fixed floating WhatsApp + Call buttons */}
+      {/* Floating Buttons */}
       <FloatingButtons />
 
-      {/* Fixed top navbar */}
+      {/* Navbar */}
       <Navbar />
 
-      {/* Exam countdown sits just below navbar */}
-      {/* <div className="pt-[72px]">
+      {/* Optional Countdown */}
+      {/* 
+      <div className="pt-[72px]">
         <ExamCountdown />
-      </div> */}
+      </div> 
+      */}
 
       <main>
-        <section id="home"><HeroSection /></section>
-        <section id="stats"><StatsSection /></section>
-        <section id="notices"><NoticeBoard /></section>
-        <section id="courses"><CoursesSection /></section>
-        <section id="fees"><FeeStructure /></section>
-        <section id="features"><FeaturesSection /></section>
-        <section id="faculty"><FacultySection /></section>
-        <section id="toppers"><ToppersWall /></section>
-        <section id="youtube"><YouTubeSection /></section>
-        <section id="testimonials"><TestimonialsSection /></section>
-        <section id="gallery"><GallerySection /></section>
-        <section id="admission"><AdmissionForm /></section>
-        <section id="map"><MapSection /></section>
-        <section id="contact"><ContactSection /></section>
+        {/* SEO hidden heading (helps Google) */}
+        <section className="hidden">
+          <h1>
+            Pradhan Coaching Center in Tekhand, Okhla Phase 1, New Delhi
+          </h1>
+        </section>
+
+        {/* Sections */}
+        <section id="home">
+          <HeroSection />
+        </section>
+
+        <section id="stats">
+          <StatsSection />
+        </section>
+
+        {/* <section id="notices"><NoticeBoard /></section> */}
+
+        <section id="courses">
+          <CoursesSection />
+        </section>
+
+        {/* <section id="fees"><FeeStructure /></section> */}
+
+        <section id="features">
+          <FeaturesSection />
+        </section>
+
+        {/* <section id="faculty"><FacultySection /></section> */}
+        {/* <section id="toppers"><ToppersWall /></section> */}
+
+        <section id="youtube">
+          <YouTubeSection />
+        </section>
+
+        {/* <section id="testimonials"><TestimonialsSection /></section> */}
+
+        <section id="gallery">
+          <GallerySection />
+        </section>
+
+        <section id="admission">
+          <AdmissionForm />
+        </section>
+
+        <section id="map">
+          <MapSection />
+        </section>
+
+        <section id="contact">
+          <ContactSection />
+        </section>
       </main>
 
+      {/* Footer */}
       <Footer />
     </div>
   );

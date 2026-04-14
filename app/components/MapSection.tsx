@@ -48,14 +48,7 @@ export default function MapSection() {
           >
             📍 Open in Google Maps
           </a>
-          <a
-            href="https://maps.google.com/dir/?api=1&destination=Tekhand,New+Delhi"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 border-2 border-blue-600 text-blue-600 font-bold px-6 py-3 rounded-xl hover:bg-blue-600 hover:text-white transition-colors text-sm justify-center"
-          >
-            🧭 Get Directions
-          </a>
+          
         </div>
       </div>
     </section>

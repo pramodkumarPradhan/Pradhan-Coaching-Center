@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 export default function ContactSection() {
   const contacts = [
     { icon: "📍", label: "Address", val: "Tekhand, New Delhi, India" },
@@ -25,12 +27,12 @@ export default function ContactSection() {
           ))}
         </div>
 
-        <a
+        <Link
           href="/admission"
           className="inline-block bg-amber-400 text-slate-900 font-bold px-10 py-3.5 rounded-xl hover:bg-amber-300 transition-colors duration-200 shadow-lg"
         >
           Apply for Admission →
-        </a>
+        </Link>
       </div>
     </section>
   );
