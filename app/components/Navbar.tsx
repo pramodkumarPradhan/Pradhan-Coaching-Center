@@ -12,7 +12,6 @@ export default function Navbar() {
 
   const navItems = [
     { name: "Home", id: "home" },
-    { name: "Notices", id: "notices" },
     { name: "Courses", id: "courses" },
     { name: "Notes", link: "/notes" }, // page route
     { name: "Contact", id: "contact" },

@@ -45,26 +45,11 @@ export default function FeaturesSection() {
       icon: "📚",
       title: "Study Materials",
       desc: "Curated notes, practice sheets, and downloadable PDFs aligned with latest syllabi.",
-    },
-    {
-      icon: "🏆",
-      title: "Result-Oriented",
-      desc: "95% of our students achieve distinction. We celebrate every success.",
-    },
-    {
-      icon: "👨‍👩‍👧",
-      title: "Parent Connect",
-      desc: "Monthly PTMs and real-time progress reports keep parents informed and involved.",
-    },
-    {
-      icon: "💡",
-      title: "Doubt Sessions",
-      desc: "Dedicated doubt-clearing sessions every week so no student is left behind.",
-    },
+    }
   ];
 
   return (
-    <section className="py-24 max-w-7xl mx-auto px-6">
+    <section className="py-14 max-w-7xl mx-auto px-6">
       <div className="text-center mb-16">
         <p className="text-blue-600 font-bold text-sm uppercase tracking-widest mb-2">
           Why We Stand Out
