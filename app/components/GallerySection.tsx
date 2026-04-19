@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 
 export default function GallerySection() {
   const images = [
-    "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600",
     "https://res.cloudinary.com/dlcjyh6fb/image/upload/v1774521929/classroom_image_ja0yft.jpg",
-    "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=600",
+    "https://res.cloudinary.com/dlcjyh6fb/image/upload/v1776478044/rahul_bhai_class_edited_sdohac.jpg",
+    "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600"
   ];
 
   return (

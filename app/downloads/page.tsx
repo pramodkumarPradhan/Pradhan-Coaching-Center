@@ -12,17 +12,18 @@ export default function DownloadsPage() {
       name: "Mathematics Formulas (Ch 1, 2, 3 & Mensuration)",
       icon: "📐",
       url: "https://pub-478bcf1c8ef5411fbc3b76fb27883c64.r2.dev/Mathematics%20Formula%20Class%209th%20Chapter%201%20%2C2%20%2C3%20And%20Mensuration_watermark%20(1).pdf",
-    },
-    {
-      name: "Change of Number (Singular to Plural)",
-      icon: "🔤",
-      url: "https://pub-478bcf1c8ef5411fbc3b76fb27883c64.r2.dev/FORMULA/Change%20The%20Number%20(%20Singular%20....%20Plural)-stamped.pdf",
-    },
-    {
-      name: "Determiners",
-      icon: "📘",
-      url: "https://pub-478bcf1c8ef5411fbc3b76fb27883c64.r2.dev/FORMULA/Determiners%20_watermark.pdf",
-    },
+    }
+    // ,
+    // {
+    //   name: "Change of Number (Singular to Plural)",
+    //   icon: "🔤",
+    //   url: "https://pub-478bcf1c8ef5411fbc3b76fb27883c64.r2.dev/FORMULA/Change%20The%20Number%20(%20Singular%20....%20Plural)-stamped.pdf",
+    // },
+    // {
+    //   name: "Determiners",
+    //   icon: "📘",
+    //   url: "https://pub-478bcf1c8ef5411fbc3b76fb27883c64.r2.dev/FORMULA/Determiners%20_watermark.pdf",
+    // },
   ];
 
   const data = [
@@ -74,8 +75,33 @@ export default function DownloadsPage() {
           name: "Chapter 1 (Part II)",
           url: "https://pub-478bcf1c8ef5411fbc3b76fb27883c64.r2.dev/CLASS%209%20ENGLISH%20(KAVERI)/class%209%20chap%201(II).pdf",
         },
+        {
+          name: "Chapter 2 (Part I)",
+          url: "https://pub-478bcf1c8ef5411fbc3b76fb27883c64.r2.dev/CLASS%209%20ENGLISH%20(KAVERI)/class%209%20chap%202(I).pdf",
+        },
+        {
+          name: "Chapter 2 (Part II)",
+          url: "https://pub-478bcf1c8ef5411fbc3b76fb27883c64.r2.dev/CLASS%209%20ENGLISH%20(KAVERI)/class%209%20chap%202(II).pdf",
+        },
       ],
     },
+    {
+      title: "Class 9 Science Book",
+      chapters: [
+        {
+          name: "Exploration Entering the world of secondary science",
+          url: "https://pub-478bcf1c8ef5411fbc3b76fb27883c64.r2.dev/Science/Exploration%20Entering%20the%20world%20of%20secondary%20science.pdf",
+        },
+        {
+          name: "Describing Motion Around us",
+          url: "https://pub-478bcf1c8ef5411fbc3b76fb27883c64.r2.dev/Science/Describing%20Motion%20Around%20us.pdf",
+        },
+        {
+          name: "Exploration Mixture and their Separation",
+          url: "https://pub-478bcf1c8ef5411fbc3b76fb27883c64.r2.dev/Science/Exploration%20Mixture%20and%20their%20Separation.pdf",
+        }
+      ],
+    }
   ];
 
   useEffect(() => {
