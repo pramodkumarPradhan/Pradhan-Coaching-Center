@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 export default function Navbar() {
@@ -44,11 +45,17 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
 
         {/* Logo */}
-        <a href="#home" className="flex items-center gap-3 group">
-          <span className="w-9 h-9 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl flex items-center justify-center text-white font-bold shadow-md group-hover:scale-105 transition">
-            P
-          </span>
-          <span className="text-xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
+        <a href="#home" className="flex items-center ">
+          <div className="flex items-center justify-center ">
+            <Image
+              src="/logo1.png"
+              alt="logo"
+              width={45}
+              height={45}
+            />
+          </div>
+
+          <span className="text-[18px] font-semibold leading-tight bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
             Pradhan Coaching
           </span>
         </a>
@@ -69,9 +76,8 @@ export default function Navbar() {
               >
                 {item.name}
                 <span
-                  className={`absolute left-0 -bottom-1 h-[2px] bg-blue-600 transition-all duration-300 ${
-                    isActive ? "w-full" : "w-0 group-hover:w-full"
-                  }`}
+                  className={`absolute left-0 -bottom-1 h-[2px] bg-blue-600 transition-all duration-300 ${isActive ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
                 />
               </Link>
             ) : (
@@ -82,9 +88,8 @@ export default function Navbar() {
               >
                 {item.name}
                 <span
-                  className={`absolute left-0 -bottom-1 h-[2px] bg-blue-600 transition-all duration-300 ${
-                    isActive ? "w-full" : "w-0 group-hover:w-full"
-                  }`}
+                  className={`absolute left-0 -bottom-1 h-[2px] bg-blue-600 transition-all duration-300 ${isActive ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
                 />
               </a>
             );
@@ -97,7 +102,7 @@ export default function Navbar() {
           >
             Admission Now
           </a>
-          
+
         </nav>
 
         {/* Mobile button */}
@@ -111,9 +116,8 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ${
-          menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-        }`}
+        className={`md:hidden overflow-hidden transition-all duration-300 ${menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          }`}
       >
         <div className="bg-white/90 backdrop-blur-xl px-6 py-5 flex flex-col gap-5 text-sm font-medium text-slate-700">
           {navItems.map((item, index) =>
