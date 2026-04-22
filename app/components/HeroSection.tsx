@@ -60,13 +60,19 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.7 }}
-          className="flex justify-center"
+          className="flex flex-col sm:flex-row justify-center gap-4"
         >
           <a
             href="#admission"
-            className="bg-amber-400 text-slate-900 font-bold px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl hover:bg-amber-300 transition-all duration-300 shadow-lg shadow-amber-500/30 hover:scale-105 text-sm sm:text-base"
+            className="bg-amber-400 text-slate-900 font-bold px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl hover:bg-amber-300 transition-all duration-300 shadow-lg shadow-amber-500/30 hover:scale-105 text-sm sm:text-base flex items-center justify-center"
           >
             Admission Now →
+          </a>
+          <a
+            href="/notes"
+            className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl hover:from-cyan-400 hover:to-blue-400 transition-all duration-300 shadow-lg shadow-blue-500/30 hover:scale-105 text-sm sm:text-base flex items-center justify-center"
+          >
+            View Our Notes 📚
           </a>
         </motion.div>
       </div>
