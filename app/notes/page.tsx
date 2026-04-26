@@ -105,33 +105,9 @@ export default function DownloadsPage() {
     }
   ];
 
-  const staticBooksData = [
-    {
-      title: "Class 9 English Book",
-      chapters: [
-        {
-          name: "Chapter 1 (Part I)",
-          url: "https://pub-478bcf1c8ef5411fbc3b76fb27883c64.r2.dev/CLASS%209%20ENGLISH%20(KAVERI)/Class%209th%20English%20Chapter%201%20(I).pdf",
-        },
-        {
-          name: "Chapter 1 (Part II)",
-          url: "https://pub-478bcf1c8ef5411fbc3b76fb27883c64.r2.dev/CLASS%209%20ENGLISH%20(KAVERI)/class%209%20chap%201(II).pdf",
-        },
-        {
-          name: "Chapter 2 (Part I)",
-          url: "https://pub-478bcf1c8ef5411fbc3b76fb27883c64.r2.dev/CLASS%209%20ENGLISH%20(KAVERI)/class%209%20chap%202(I).pdf",
-        },
-        {
-          name: "Chapter 2 (Part II)",
-          url: "https://pub-478bcf1c8ef5411fbc3b76fb27883c64.r2.dev/CLASS%209%20ENGLISH%20(KAVERI)/class%209%20chap%202(II).pdf",
-        },
-      ],
-    },
-  ];
-
   // Merge static data with dynamic materials
   const combinedData = [...staticData];
-  const combinedBooksData = [...staticBooksData];
+  const combinedBooksData: { title: string; chapters: { name: string; url: string }[] }[] = [];
   const dynamicFormulas: { class: string; subjects: any[] }[] = [];
 
   // Group dynamic materials
