@@ -68,32 +68,69 @@ export default function AdminDashboard() {
     }
 
     setLoading(true);
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("title", title);
-    formData.append("category", category);
-    formData.append("class", classLevel);
-    formData.append("subject", subject);
-    formData.append("icon", icon);
 
     try {
-      const res = await fetch("/api/materials", {
+      // 1. Get Presigned URL
+      const presignRes = await fetch("/api/materials/presign", {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          filename: file.name,
+          contentType: file.type || "application/pdf",
+        }),
+      });
+      const presignData = await presignRes.json();
+
+      if (!presignData.success) {
+        throw new Error(presignData.error || "Failed to get upload URL");
+      }
+
+      const { signedUrl, fileUrl } = presignData.data;
+
+      // 2. Upload file directly to Cloudflare R2
+      const uploadRes = await fetch(signedUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": file.type || "application/pdf",
+        },
+        body: file,
       });
 
-      const data = await res.json();
-      if (data.success) {
+      if (!uploadRes.ok) {
+        throw new Error("Failed to upload file directly to storage");
+      }
+
+      // 3. Save metadata to MongoDB
+      const sizeInMB = (file.size / (1024 * 1024)).toFixed(2) + " MB";
+
+      const dbRes = await fetch("/api/materials", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          category,
+          classLevel,
+          subject,
+          icon,
+          size: sizeInMB,
+          fileUrl,
+        }),
+      });
+
+      const dbData = await dbRes.json();
+
+      if (dbData.success) {
         alert("Uploaded successfully!");
         setFile(null);
         setTitle("");
         setSubject("");
         fetchMaterials();
       } else {
-        alert(data.error || "Upload failed");
+        throw new Error(dbData.error || "Failed to save file information");
       }
-    } catch (err) {
-      alert("Error uploading file");
+    } catch (err: any) {
+      console.error(err);
+      alert(err.message || "Error uploading file");
     } finally {
       setLoading(false);
     }

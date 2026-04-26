@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1034.0",
+    "@aws-sdk/s3-request-presigner": "^3.1037.0",
     "autoprefixer": "^10.4.27",
     "bcryptjs": "^3.0.3",
     "firebase": "^12.11.0",

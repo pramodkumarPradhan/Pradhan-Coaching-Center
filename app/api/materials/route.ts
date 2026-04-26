@@ -30,42 +30,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: 'Unauthorized: Admin access required' }, { status: 401 });
     }
 
-    const data = await request.formData();
-    const file: File | null = data.get('file') as unknown as File;
-    const title = data.get('title') as string;
-    const category = data.get('category') as string;
-    const classLevel = data.get('class') as string;
-    const subject = data.get('subject') as string;
-    const icon = data.get('icon') as string;
+    const { title, category, classLevel, subject, icon, size, fileUrl } = await request.json();
 
-    if (!file || !title || !category || !classLevel || !subject) {
+    if (!title || !category || !classLevel || !subject || !size || !fileUrl) {
       return NextResponse.json({ success: false, error: 'Missing required fields' }, { status: 400 });
     }
-
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    // Generate unique filename
-    const filename = `${Date.now()}-${file.name.replace(/\s+/g, '_')}`;
-
-    // Upload to Cloudflare R2
-    const bucketName = process.env.R2_BUCKET_NAME!;
-    const publicDomain = process.env.R2_PUBLIC_DOMAIN!;
-
-    await s3Client.send(
-      new PutObjectCommand({
-        Bucket: bucketName,
-        Key: filename,
-        Body: buffer,
-        ContentType: file.type || 'application/pdf',
-      })
-    );
-
-    // Create Public R2 URL
-    const fileUrl = `${publicDomain}/${filename}`;
-    
-    // Calculate Size (MB)
-    const sizeInMB = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
 
     await dbConnect();
     
@@ -74,14 +43,14 @@ export async function POST(request: Request) {
       category,
       class: classLevel,
       subject,
-      size: sizeInMB,
+      size,
       url: fileUrl,
       icon: icon || '📘',
     });
 
     return NextResponse.json({ success: true, data: material });
   } catch (error: any) {
-    console.error('Error uploading file:', error);
-    return NextResponse.json({ success: false, error: error.message || 'Failed to upload material' }, { status: 500 });
+    console.error('Error saving material:', error);
+    return NextResponse.json({ success: false, error: error.message || 'Failed to save material' }, { status: 500 });
   }
 }
