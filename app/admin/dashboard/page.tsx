@@ -139,7 +139,7 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 via-white to-pink-100 p-4 md:p-10 font-sans">
       <div className="max-w-7xl mx-auto bg-white/90 backdrop-blur-xl p-6 md:p-10 rounded-[2.5rem] shadow-2xl shadow-purple-200/50 border border-white">
-        <div className="flex justify-between items-center mb-10 border-b border-purple-100 pb-6">
+        <div className="flex flex-col md:flex-row gap-6 justify-between items-center mb-10 border-b border-purple-100 pb-6 text-center md:text-left">
           <div>
             <h1 className="text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
               Admin Dashboard
@@ -154,9 +154,9 @@ export default function AdminDashboard() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:items-start">
           {/* Upload Form */}
-          <div className="col-span-1 bg-white p-8 rounded-[2rem] border border-purple-100 shadow-xl shadow-purple-100">
+          <div className="col-span-1 bg-white p-6 md:p-8 rounded-[2rem] border border-purple-100 shadow-xl shadow-purple-100 lg:sticky lg:top-10 h-fit">
             <h2 className="text-2xl font-extrabold mb-6 text-purple-900 flex items-center gap-2">
               <span className="text-3xl">☁️</span> Upload Resource
             </h2>
@@ -248,7 +248,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* List of Materials */}
-          <div className="col-span-2">
+          <div className="col-span-1 lg:col-span-2">
             <h2 className="text-2xl font-extrabold mb-6 text-purple-900">Uploaded Materials</h2>
             {fetching ? (
               <div className="flex justify-center items-center h-32">
