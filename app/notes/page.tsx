@@ -15,7 +15,6 @@ interface Material {
 export default function DownloadsPage() {
   const [openClass, setOpenClass] = useState<number | null>(1);
   const [openBook, setOpenBook] = useState<number | null>(0);
-  const [openFormula, setOpenFormula] = useState<number | null>(0);
   const [dynamicMaterials, setDynamicMaterials] = useState<Material[]>([]);
 
   useEffect(() => {
@@ -175,14 +174,9 @@ export default function DownloadsPage() {
             <div className="space-y-6">
               {dynamicFormulas.map((cls, i) => (
                 <div key={i} className="bg-white shadow-2xl rounded-3xl border">
-                  <button
-                    onClick={() => setOpenFormula(openFormula === i ? null : i)}
-                    className="w-full flex justify-between items-center px-8 py-5 text-xl font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-t-3xl"
-                  >
+                  <div className="w-full px-8 py-5 text-xl font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-t-3xl">
                     🎓 {cls.class}
-                    <span className="text-2xl">{openFormula === i ? "−" : "+"}</span>
-                  </button>
-                  {openFormula === i && (
+                  </div>
                   <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     {cls.subjects.map((sub, index) => (
                       <div
@@ -209,7 +203,6 @@ export default function DownloadsPage() {
                       </div>
                     ))}
                   </div>
-                  )}
                 </div>
               ))}
             </div>
