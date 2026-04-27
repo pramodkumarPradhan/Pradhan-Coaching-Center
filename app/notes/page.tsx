@@ -144,12 +144,15 @@ export default function DownloadsPage() {
     }
   });
 
-  // Sort dynamic formulas by class number
-  dynamicFormulas.sort((a, b) => {
-    const numA = parseInt(a.class.replace(/\D/g, '')) || 0;
-    const numB = parseInt(b.class.replace(/\D/g, '')) || 0;
-    return numA - numB;
-  });
+  // Sort all data by class number
+  const extractClassNum = (str: string) => {
+    const match = str.match(/\d+/);
+    return match ? parseInt(match[0], 10) : 0;
+  };
+
+  dynamicFormulas.sort((a, b) => extractClassNum(a.class) - extractClassNum(b.class));
+  combinedData.sort((a, b) => extractClassNum(a.class) - extractClassNum(b.class));
+  combinedBooksData.sort((a, b) => extractClassNum(a.title) - extractClassNum(b.title));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 p-4 md:p-10">
