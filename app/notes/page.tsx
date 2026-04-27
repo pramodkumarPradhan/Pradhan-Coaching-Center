@@ -206,6 +206,22 @@ export default function DownloadsPage() {
                       </div>
                     ))}
                   </div>
+                  {["Class 8", "Class 9", "Class 10"].includes(cls.class) && (
+                    <div className="bg-red-50/50 p-4 sm:p-5 border-t border-red-100 flex flex-col sm:flex-row justify-between items-center px-6 sm:px-8 gap-4 rounded-b-3xl">
+                      <div className="text-red-800 font-medium text-sm sm:text-base text-center sm:text-left flex items-center gap-2">
+                        <span className="text-2xl">📺</span> 
+                        <span>For more questions and detailed video solutions, visit our YouTube channel!</span>
+                      </div>
+                      <a 
+                        href="https://www.youtube.com/@radharanifreeeducation3647" 
+                        target="_blank" 
+                        rel="noreferrer"
+                        className="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-xl font-bold transition shadow-md shadow-red-500/30 whitespace-nowrap"
+                      >
+                        ▶ Watch on YouTube
+                      </a>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
