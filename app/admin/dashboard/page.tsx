@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 interface Material {
@@ -19,6 +19,7 @@ export default function AdminDashboard() {
   const [materials, setMaterials] = useState<Material[]>([]);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
+  const [editingId, setEditingId] = useState<string | null>(null);
   
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
@@ -60,9 +61,30 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleUpload = async (e: React.FormEvent) => {
+  const handleEdit = (mat: Material) => {
+    setEditingId(mat._id);
+    setCategory(mat.category);
+    setClassLevel(mat.class);
+    setSubject(mat.subject);
+    setTitle(mat.title);
+    setIcon(mat.icon);
+    setFile(null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setCategory("Supporting Material");
+    setClassLevel("Class 10");
+    setSubject("");
+    setTitle("");
+    setIcon("📘");
+    setFile(null);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file) {
+    if (!editingId && !file) {
       alert("Please select a file first.");
       return;
     }
@@ -70,67 +92,80 @@ export default function AdminDashboard() {
     setLoading(true);
 
     try {
-      // 1. Get Presigned URL
-      const presignRes = await fetch("/api/materials/presign", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          filename: file.name,
-          contentType: file.type || "application/pdf",
-        }),
-      });
-      const presignData = await presignRes.json();
+      let finalFileUrl = "";
+      let finalSize = "";
 
-      if (!presignData.success) {
-        throw new Error(presignData.error || "Failed to get upload URL");
-      }
+      if (file) {
+        // 1. Get Presigned URL
+        const presignRes = await fetch("/api/materials/presign", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            filename: file.name,
+            contentType: file.type || "application/pdf",
+          }),
+        });
+        const presignData = await presignRes.json();
 
-      const { signedUrl, fileUrl } = presignData.data;
+        if (!presignData.success) {
+          throw new Error(presignData.error || "Failed to get upload URL");
+        }
 
-      // 2. Upload file directly to Cloudflare R2
-      const uploadRes = await fetch(signedUrl, {
-        method: "PUT",
-        headers: {
-          "Content-Type": file.type || "application/pdf",
-        },
-        body: file,
-      });
+        const { signedUrl, fileUrl } = presignData.data;
 
-      if (!uploadRes.ok) {
-        throw new Error("Failed to upload file directly to storage");
+        // 2. Upload file directly to Cloudflare R2
+        const uploadRes = await fetch(signedUrl, {
+          method: "PUT",
+          headers: {
+            "Content-Type": file.type || "application/pdf",
+          },
+          body: file,
+        });
+
+        if (!uploadRes.ok) {
+          throw new Error("Failed to upload file directly to storage");
+        }
+
+        finalFileUrl = fileUrl;
+        finalSize = (file.size / (1024 * 1024)).toFixed(2) + " MB";
       }
 
       // 3. Save metadata to MongoDB
-      const sizeInMB = (file.size / (1024 * 1024)).toFixed(2) + " MB";
+      const apiMethod = editingId ? "PUT" : "POST";
+      const apiUrl = editingId ? `/api/materials/${editingId}` : "/api/materials";
+      
+      const payload: any = {
+        title,
+        category,
+        classLevel,
+        subject,
+        icon,
+      };
 
-      const dbRes = await fetch("/api/materials", {
-        method: "POST",
+      if (finalFileUrl) {
+        payload.fileUrl = finalFileUrl;
+        payload.url = finalFileUrl;
+        payload.size = finalSize;
+      }
+
+      const dbRes = await fetch(apiUrl, {
+        method: apiMethod,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title,
-          category,
-          classLevel,
-          subject,
-          icon,
-          size: sizeInMB,
-          fileUrl,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const dbData = await dbRes.json();
 
       if (dbData.success) {
-        alert("Uploaded successfully!");
-        setFile(null);
-        setTitle("");
-        setSubject("");
+        alert(editingId ? "Updated successfully!" : "Uploaded successfully!");
+        cancelEdit();
         fetchMaterials();
       } else {
         throw new Error(dbData.error || "Failed to save file information");
       }
     } catch (err: any) {
       console.error(err);
-      alert(err.message || "Error uploading file");
+      alert(err.message || "Error saving file");
     } finally {
       setLoading(false);
     }
@@ -158,9 +193,9 @@ export default function AdminDashboard() {
           {/* Upload Form */}
           <div className="col-span-1 bg-white p-6 md:p-8 rounded-[2rem] border border-purple-100 shadow-xl shadow-purple-100 lg:sticky lg:top-10 h-fit">
             <h2 className="text-2xl font-extrabold mb-6 text-purple-900 flex items-center gap-2">
-              <span className="text-3xl">☁️</span> Upload Resource
+              <span className="text-3xl">{editingId ? "✏️" : "☁️"}</span> {editingId ? "Edit Resource" : "Upload Resource"}
             </h2>
-            <form onSubmit={handleUpload} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Category</label>
                 <select
@@ -226,23 +261,34 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-800 mb-1">PDF File</label>
+                <label className="block text-sm font-bold text-gray-800 mb-1">{editingId ? "Replace PDF File (Optional)" : "PDF File"}</label>
                 <input
                   type="file"
                   accept=".pdf"
                   onChange={(e) => setFile(e.target.files?.[0] || null)}
                   className="w-full p-3 border border-gray-300 text-gray-900 rounded-xl bg-gray-50 outline-none focus:ring-2 focus:ring-purple-500 font-medium cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
-                  required
+                  required={!editingId}
                 />
               </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-extrabold p-4 rounded-xl hover:opacity-90 transition-all shadow-lg shadow-purple-500/40 hover:scale-105 disabled:opacity-50 mt-6 text-lg"
-              >
-                {loading ? "Uploading..." : "Upload File"}
-              </button>
+              <div className="flex gap-4 mt-6">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-extrabold p-4 rounded-xl hover:opacity-90 transition-all shadow-lg shadow-purple-500/40 hover:scale-105 disabled:opacity-50 text-lg"
+                >
+                  {loading ? "Processing..." : (editingId ? "Update File" : "Upload File")}
+                </button>
+                {editingId && (
+                  <button
+                    type="button"
+                    onClick={cancelEdit}
+                    className="flex-1 bg-gray-200 text-gray-800 font-extrabold p-4 rounded-xl hover:bg-gray-300 transition-all text-lg"
+                  >
+                    Cancel
+                  </button>
+                )}
+              </div>
             </form>
           </div>
 
@@ -277,18 +323,24 @@ export default function AdminDashboard() {
                       <p className="text-sm font-bold text-purple-500 mt-2">{mat.size}</p>
                     </div>
                     
-                    <div className="flex gap-3 pt-4 border-t-2 border-gray-100">
+                    <div className="flex gap-2 pt-4 border-t-2 border-gray-100">
                       <a 
                         href={mat.url} 
                         target="_blank" 
                         rel="noreferrer"
-                        className="flex-1 text-center text-sm font-extrabold text-white bg-blue-500 hover:bg-blue-600 py-3 rounded-xl transition-all shadow-md hover:shadow-blue-500/40 hover:-translate-y-1"
+                        className="flex-1 text-center text-sm font-extrabold text-white bg-blue-500 hover:bg-blue-600 py-2 rounded-xl transition-all shadow-md hover:shadow-blue-500/40 hover:-translate-y-1"
                       >
                         View
                       </a>
                       <button
+                        onClick={() => handleEdit(mat)}
+                        className="flex-1 text-center text-sm font-extrabold text-white bg-amber-500 hover:bg-amber-600 py-2 rounded-xl transition-all shadow-md hover:shadow-amber-500/40 hover:-translate-y-1"
+                      >
+                        Edit
+                      </button>
+                      <button
                         onClick={() => handleDelete(mat._id)}
-                        className="flex-1 text-center text-sm font-extrabold text-white bg-red-500 hover:bg-red-600 py-3 rounded-xl transition-all shadow-md hover:shadow-red-500/40 hover:-translate-y-1"
+                        className="flex-1 text-center text-sm font-extrabold text-white bg-red-500 hover:bg-red-600 py-2 rounded-xl transition-all shadow-md hover:shadow-red-500/40 hover:-translate-y-1"
                       >
                         Delete
                       </button>
