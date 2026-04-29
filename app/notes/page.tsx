@@ -13,6 +13,7 @@ interface Material {
 }
 
 export default function DownloadsPage() {
+  const [activeTab, setActiveTab] = useState<"senior" | "junior">("senior");
   const [openClass, setOpenClass] = useState<number | null>(1);
   const [openBook, setOpenBook] = useState<number | null>(0);
   const [dynamicMaterials, setDynamicMaterials] = useState<Material[]>([]);
@@ -106,40 +107,51 @@ export default function DownloadsPage() {
   ];
 
   // Merge static data with dynamic materials
+  const juniorClasses = ["Below 6 Class"];
+
   const combinedData = [...staticData];
   const combinedBooksData: { title: string; chapters: { name: string; url: string }[] }[] = [];
   const dynamicFormulas: { class: string; subjects: any[] }[] = [];
 
+  const juniorCombinedData: { class: string; subjects: any[] }[] = [];
+  const juniorCombinedBooksData: { title: string; chapters: { name: string; url: string }[] }[] = [];
+  const juniorDynamicFormulas: { class: string; subjects: any[] }[] = [];
+
   // Group dynamic materials
   dynamicMaterials.forEach(mat => {
+    const isJunior = juniorClasses.includes(mat.class);
+
     if (mat.category === "Formula") {
-      const classIndex = dynamicFormulas.findIndex(c => c.class === mat.class);
+      const targetFormulas = isJunior ? juniorDynamicFormulas : dynamicFormulas;
+      const classIndex = targetFormulas.findIndex(c => c.class === mat.class);
       const newSubject = { name: mat.title, icon: mat.icon || "🧮", size: mat.size, url: mat.url };
       
       if (classIndex >= 0) {
-        dynamicFormulas[classIndex].subjects.push(newSubject);
+        targetFormulas[classIndex].subjects.push(newSubject);
       } else {
-        dynamicFormulas.push({ class: mat.class, subjects: [newSubject] });
+        targetFormulas.push({ class: mat.class, subjects: [newSubject] });
       }
     } else if (mat.category === "Supporting Material") {
-      const classIndex = combinedData.findIndex(c => c.class === mat.class);
+      const targetData = isJunior ? juniorCombinedData : combinedData;
+      const classIndex = targetData.findIndex(c => c.class === mat.class);
       const newSubject = { name: mat.title, icon: mat.icon, size: mat.size, url: mat.url };
       
       if (classIndex >= 0) {
-        combinedData[classIndex].subjects.push(newSubject);
+        targetData[classIndex].subjects.push(newSubject);
       } else {
-        combinedData.push({ class: mat.class, subjects: [newSubject] });
+        targetData.push({ class: mat.class, subjects: [newSubject] });
       }
     } else if (mat.category === "Book") {
       // Find book by class
+      const targetBooks = isJunior ? juniorCombinedBooksData : combinedBooksData;
       const bookTitle = `${mat.class} ${mat.subject}`;
-      const bookIndex = combinedBooksData.findIndex(b => b.title === bookTitle);
+      const bookIndex = targetBooks.findIndex(b => b.title === bookTitle);
       const newChapter = { name: mat.title, url: mat.url };
 
       if (bookIndex >= 0) {
-        combinedBooksData[bookIndex].chapters.push(newChapter);
+        targetBooks[bookIndex].chapters.push(newChapter);
       } else {
-        combinedBooksData.push({ title: bookTitle, chapters: [newChapter] });
+        targetBooks.push({ title: bookTitle, chapters: [newChapter] });
       }
     }
   });
@@ -153,6 +165,14 @@ export default function DownloadsPage() {
   dynamicFormulas.sort((a, b) => extractClassNum(a.class) - extractClassNum(b.class));
   combinedData.sort((a, b) => extractClassNum(a.class) - extractClassNum(b.class));
   combinedBooksData.sort((a, b) => extractClassNum(a.title) - extractClassNum(b.title));
+
+  juniorDynamicFormulas.sort((a, b) => extractClassNum(a.class) - extractClassNum(b.class));
+  juniorCombinedData.sort((a, b) => extractClassNum(a.class) - extractClassNum(b.class));
+  juniorCombinedBooksData.sort((a, b) => extractClassNum(a.title) - extractClassNum(b.title));
+
+  const displayFormulas = activeTab === "senior" ? dynamicFormulas : juniorDynamicFormulas;
+  const displayBooksData = activeTab === "senior" ? combinedBooksData : juniorCombinedBooksData;
+  const displayCombinedData = activeTab === "senior" ? combinedData : juniorCombinedData;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 p-4 md:p-10">
@@ -168,14 +188,48 @@ export default function DownloadsPage() {
           </a>
         </div>
 
+        {/* Tabs */}
+        <div className="flex justify-center mb-10">
+          <div className="bg-white p-2 rounded-2xl shadow-lg border flex gap-2 w-full max-w-md">
+            <button
+              onClick={() => { setActiveTab("junior"); setOpenClass(null); setOpenBook(null); }}
+              className={`flex-1 py-3 text-center rounded-xl font-bold transition-all ${
+                activeTab === "junior"
+                  ? "bg-blue-600 text-white shadow-md"
+                  : "text-gray-600 hover:bg-gray-100"
+              }`}
+            >
+              Below 6 Class
+            </button>
+            <button
+              onClick={() => { setActiveTab("senior"); setOpenClass(1); setOpenBook(0); }}
+              className={`flex-1 py-3 text-center rounded-xl font-bold transition-all ${
+                activeTab === "senior"
+                  ? "bg-blue-600 text-white shadow-md"
+                  : "text-gray-600 hover:bg-gray-100"
+              }`}
+            >
+              Class 6 to 12
+            </button>
+          </div>
+        </div>
+
+        {/* Empty State Check */}
+        {displayFormulas.length === 0 && displayBooksData.length === 0 && displayCombinedData.length === 0 && (
+          <div className="text-center bg-white p-10 rounded-3xl shadow-xl border my-20">
+            <h3 className="text-2xl font-bold text-gray-800 mb-2">No materials available yet</h3>
+            <p className="text-gray-500">Check back later for updates to this section!</p>
+          </div>
+        )}
+
         {/* ================= FORMULAS ================= */}
-        {dynamicFormulas.length > 0 && (
+        {displayFormulas.length > 0 && (
           <div className="mb-14">
             <h2 className="text-4xl font-extrabold text-center mb-8 text-emerald-600">
               🧮 Formulas
             </h2>
             <div className="space-y-6">
-              {dynamicFormulas.map((cls, i) => (
+              {displayFormulas.map((cls, i) => (
                 <div key={i} className="bg-white shadow-2xl rounded-3xl border">
                   <div className="w-full px-8 py-5 text-xl font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-t-3xl">
                     🎓 {cls.class}
@@ -229,13 +283,13 @@ export default function DownloadsPage() {
         )}
 
         {/* ================= BOOKS ================= */}
-        {combinedBooksData.length > 0 && (
+        {displayBooksData.length > 0 && (
           <>
             <h2 className="text-4xl font-extrabold text-center mb-8 text-purple-600">
               📖 Books
             </h2>
 
-            {combinedBooksData.map((book, i) => (
+            {displayBooksData.map((book, i) => (
               <div key={i} className="bg-white shadow-2xl rounded-3xl mb-10 border">
 
                 <button
@@ -275,12 +329,14 @@ export default function DownloadsPage() {
         )}
 
         {/* ================= SUPPORTING MATERIAL ================= */}
-        <h2 className="text-4xl font-extrabold text-center mb-8 text-blue-600">
-          📚 Supporting Materials
-        </h2>
+        {displayCombinedData.length > 0 && (
+          <>
+            <h2 className="text-4xl font-extrabold text-center mb-8 text-blue-600">
+              📚 Supporting Materials
+            </h2>
 
-        <div className="space-y-6">
-          {combinedData.map((cls, i) => (
+            <div className="space-y-6">
+              {displayCombinedData.map((cls, i) => (
             <div key={i} className="bg-white shadow-2xl rounded-3xl border">
 
               <button
@@ -330,7 +386,9 @@ export default function DownloadsPage() {
               )}
             </div>
           ))}
-        </div>
+            </div>
+          </>
+        )}
 
         {/* FOOTER */}
         <div className="text-center mt-14 pb-10 text-gray-500 text-sm">
