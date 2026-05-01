@@ -119,33 +119,44 @@ export default function DownloadsPage() {
 
   // Group dynamic materials
   dynamicMaterials.forEach(mat => {
-    const isJunior = juniorClasses.includes(mat.class);
+    const safeClass = mat.class || "";
+    const safeSubject = mat.subject || "";
+    
+    const normalizedClass = safeClass.trim().replace(/\s+/g, ' ');
+    let normalizedSubject = safeSubject.trim().replace(/\s+/g, ' ');
+    
+    // Fix common typos in subject
+    if (normalizedSubject.toLowerCase() === 'mathmatics' || normalizedSubject.toLowerCase() === 'maths') {
+      normalizedSubject = 'Mathematics';
+    }
+    
+    const isJunior = juniorClasses.includes(mat.class) || juniorClasses.includes(normalizedClass);
 
     if (mat.category === "Formula") {
       const targetFormulas = isJunior ? juniorDynamicFormulas : dynamicFormulas;
-      const classIndex = targetFormulas.findIndex(c => c.class === mat.class);
+      const classIndex = targetFormulas.findIndex(c => c.class.toLowerCase() === normalizedClass.toLowerCase());
       const newSubject = { name: mat.title, icon: mat.icon || "🧮", size: mat.size, url: mat.url };
       
       if (classIndex >= 0) {
         targetFormulas[classIndex].subjects.push(newSubject);
       } else {
-        targetFormulas.push({ class: mat.class, subjects: [newSubject] });
+        targetFormulas.push({ class: normalizedClass || mat.class, subjects: [newSubject] });
       }
     } else if (mat.category === "Supporting Material") {
       const targetData = isJunior ? juniorCombinedData : combinedData;
-      const classIndex = targetData.findIndex(c => c.class === mat.class);
+      const classIndex = targetData.findIndex(c => c.class.toLowerCase() === normalizedClass.toLowerCase());
       const newSubject = { name: mat.title, icon: mat.icon, size: mat.size, url: mat.url };
       
       if (classIndex >= 0) {
         targetData[classIndex].subjects.push(newSubject);
       } else {
-        targetData.push({ class: mat.class, subjects: [newSubject] });
+        targetData.push({ class: normalizedClass || mat.class, subjects: [newSubject] });
       }
     } else if (mat.category === "Book") {
       // Find book by class
       const targetBooks = isJunior ? juniorCombinedBooksData : combinedBooksData;
-      const bookTitle = `${mat.class} ${mat.subject}`;
-      const bookIndex = targetBooks.findIndex(b => b.title === bookTitle);
+      const bookTitle = `${normalizedClass} ${normalizedSubject}`.trim();
+      const bookIndex = targetBooks.findIndex(b => b.title.toLowerCase() === bookTitle.toLowerCase());
       const newChapter = { name: mat.title, url: mat.url };
 
       if (bookIndex >= 0) {
