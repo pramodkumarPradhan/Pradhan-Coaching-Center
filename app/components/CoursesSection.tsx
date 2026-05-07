@@ -7,7 +7,7 @@ export default function CoursesSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
 
-  const allowed = ["class-9", "class-10"];
+  const allowed = ["class-6", "class-9", "class-11"];
 
   const courses = [
     {
@@ -140,7 +140,7 @@ export default function CoursesSection() {
                         >
                           {isAllowed ? (
                             <Link
-                              href={`/downloads#${s.slug}`}
+                              href={`/notes`}
                               className="hover:text-white transition"
                             >
                               • {s.name}

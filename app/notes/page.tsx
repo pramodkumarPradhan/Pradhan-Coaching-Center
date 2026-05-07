@@ -107,7 +107,7 @@ export default function DownloadsPage() {
   ];
 
   // Merge static data with dynamic materials
-  const juniorClasses = ["Below 6 Class"];
+  const juniorClasses = ["Radha rani Public School", "Below 6 Class"];
 
   const combinedData = [...staticData];
   const combinedBooksData: { title: string; chapters: { name: string; url: string }[] }[] = [];
@@ -210,7 +210,7 @@ export default function DownloadsPage() {
                   : "text-gray-600 hover:bg-gray-100"
               }`}
             >
-              Below 6 Class
+              Radha rani Public School
             </button>
             <button
               onClick={() => { setActiveTab("senior"); setOpenClass(1); setOpenBook(0); }}

@@ -25,7 +25,7 @@ const nunito = Nunito({
   weight: ["400", "600", "700", "800", "900"],
 });
 
-// ✅ Page-level SEO (IMPORTANT)
+// ✅ Page-level SEO (IMPORTANT) 
 export const metadata = {
   title:
     "Pradhan Coaching Center - Best Coaching in Tekhand, Okhla Phase 1, New Delhi",
@@ -87,7 +87,7 @@ export default function Home() {
           <YouTubeSection />
         </section>
 
-        {/* <section id="testimonials"><TestimonialsSection /></section> */}
+        <section id="testimonials"><TestimonialsSection /></section>
 
         <section id="gallery">
           <GallerySection />
