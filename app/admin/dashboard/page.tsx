@@ -216,7 +216,7 @@ export default function AdminDashboard() {
                   onChange={(e) => setClassLevel(e.target.value)}
                   className="w-full p-3 bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-500 rounded-xl outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white transition-all font-medium"
                 >
-                  <option value="Radha rani Public School">Radha rani Public School</option>
+                  <option value="Below Class 6">Below Class 6</option>
                   <option value="Class 6 & 7">Class 6 & 7</option>
                   <option value="Class 8">Class 8</option>
                   <option value="Class 9">Class 9</option>

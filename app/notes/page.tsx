@@ -107,7 +107,7 @@ export default function DownloadsPage() {
   ];
 
   // Merge static data with dynamic materials
-  const juniorClasses = ["Radha rani Public School", "Below 6 Class"];
+  const juniorClasses = ["Radha rani Public School", "Below 6 Class", "Below Class 6"];
 
   const combinedData = [...staticData];
   const combinedBooksData: { title: string; chapters: { name: string; url: string }[] }[] = [];
@@ -122,7 +122,7 @@ export default function DownloadsPage() {
     const safeClass = mat.class || "";
     const safeSubject = mat.subject || "";
     
-    const normalizedClass = safeClass.trim().replace(/\s+/g, ' ');
+    let normalizedClass = safeClass.trim().replace(/\s+/g, ' ');
     let normalizedSubject = safeSubject.trim().replace(/\s+/g, ' ');
     
     // Fix common typos in subject
@@ -131,6 +131,9 @@ export default function DownloadsPage() {
     }
     
     const isJunior = juniorClasses.includes(mat.class) || juniorClasses.includes(normalizedClass);
+    if (isJunior) {
+      normalizedClass = "Below Class 6";
+    }
 
     if (mat.category === "Formula") {
       const targetFormulas = isJunior ? juniorDynamicFormulas : dynamicFormulas;
@@ -140,7 +143,7 @@ export default function DownloadsPage() {
       if (classIndex >= 0) {
         targetFormulas[classIndex].subjects.push(newSubject);
       } else {
-        targetFormulas.push({ class: normalizedClass || mat.class, subjects: [newSubject] });
+        targetFormulas.push({ class: normalizedClass, subjects: [newSubject] });
       }
     } else if (mat.category === "Supporting Material") {
       const targetData = isJunior ? juniorCombinedData : combinedData;
@@ -150,7 +153,7 @@ export default function DownloadsPage() {
       if (classIndex >= 0) {
         targetData[classIndex].subjects.push(newSubject);
       } else {
-        targetData.push({ class: normalizedClass || mat.class, subjects: [newSubject] });
+        targetData.push({ class: normalizedClass, subjects: [newSubject] });
       }
     } else if (mat.category === "Book") {
       // Find book by class
@@ -210,7 +213,7 @@ export default function DownloadsPage() {
                   : "text-gray-600 hover:bg-gray-100"
               }`}
             >
-              Radha rani Public School
+              Below Class 6
             </button>
             <button
               onClick={() => { setActiveTab("senior"); setOpenClass(1); setOpenBook(0); }}
